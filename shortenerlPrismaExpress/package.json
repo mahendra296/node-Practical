@@ -1,0 +1,27 @@
+{
+  "name": "http_module",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --env-file=.env --watch index.js",
+    "debug": "node --env-file=.env --inspect index.js"
+  },
+  "dependencies": {
+    "@prisma/adapter-mariadb": "^7.1.0",
+    "@prisma/client": "^7.1.0",
+    "dotenv": "^17.2.3",
+    "ejs": "^3.1.10",
+    "express": "^5.2.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.15.3",
+    "zod": "^4.1.13"
+  },
+  "devDependencies": {
+    "prisma": "^7.1.0"
+  }
+}

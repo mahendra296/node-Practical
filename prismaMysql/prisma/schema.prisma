@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String?
+  published Boolean  @default(false)
+  authorId  Int
+  createdAt DateTime @default(now())
+  user      user     @relation(fields: [authorId], references: [id], map: "Post_authorId_fkey")
+
+  @@index([authorId], map: "Post_authorId_fkey")
+}
+
+model profile {
+  id     Int     @id @default(autoincrement())
+  bio    String?
+  avatar String?
+  userId Int     @unique(map: "Profile_userId_key")
+  user   user    @relation(fields: [userId], references: [id], onDelete: Cascade, map: "Profile_userId_fkey")
+}
+
+model user {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique(map: "User_email_key")
+  name      String?
+  password  String
+  role      user_role @default(USER)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime @updatedAt
+  post      post[]
+  profile   profile?
+}
+
+enum user_role {
+  USER
+  ADMIN
+  MODERATOR
+}

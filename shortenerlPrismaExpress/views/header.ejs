@@ -1,0 +1,46 @@
+<header class="main-header">
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <span class="logo-icon">🔗</span>
+        <span class="logo-text">QuickLink</span>
+      </div>
+      <ul class="nav-menu">
+        <li><a href="/" class="nav-link" data-page="/">Home</a></li>
+        <li><a href="/about" class="nav-link" data-page="/about">About</a></li>
+        <li>
+          <a href="/report" class="nav-link" data-page="/report">Report</a>
+        </li>
+        <li>
+          <a href="/contact" class="nav-link" data-page="/contact">Contact</a>
+        </li>
+      </ul>
+      <button class="mobile-menu-toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<script>
+  // Set active navigation link based on current path
+  document.addEventListener("DOMContentLoaded", function () {
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll(".nav-link");
+
+    navLinks.forEach((link) => {
+      // Remove active class from all links first
+      link.classList.remove("active");
+
+      // Get the data-page attribute
+      const linkPath = link.getAttribute("data-page");
+
+      // Add active class to matching link
+      if (currentPath === linkPath) {
+        link.classList.add("active");
+      }
+    });
+  });
+</script>
