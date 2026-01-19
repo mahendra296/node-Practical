@@ -4,6 +4,7 @@ import {
   postShortner,
   redirectToShortLinks,
   deleteShortLink,
+  getHello,
 } from "../controller/shortnerControllerMySQL.js";
 
 const router = Router();
@@ -19,5 +20,7 @@ router.post("/", postShortner);
 router.get("/shortCode/:shortCode", redirectToShortLinks);
 
 router.post("/delete/:shortCode", deleteShortLink);
+
+router.get("/get/hello", getHello);
 
 export const shortenRouter = router;

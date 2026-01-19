@@ -1,0 +1,8 @@
+drizzleMySql/drizzle/00*.sql
+shortenerlExpress/node_modules/**
+shortenerlDrizzleMysqlExpress/node_modules/**
+shortenerlDrizzlePostgresExpress/node_modules/**
+shortenerlPrismaExpress/node_modules/**
+/drizzleMySql/drizzle/meta/**
+/shortenerlPrismaExpress/prisma/migrations/**
+shortenerlDrizzlePostgresExpress/drizzle/00*.sql

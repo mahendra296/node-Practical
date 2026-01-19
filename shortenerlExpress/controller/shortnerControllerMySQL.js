@@ -6,6 +6,8 @@ import {
   getLinkByShortCode,
 } from "../model/shortnerModelMySQL.js";
 
+import ApiResponse from "../utils/api-response.js";
+
 export const getShortnerPage = async (req, res) => {
   try {
     console.log("Request recived in DB");
@@ -95,5 +97,19 @@ export const deleteShortLink = async (req, res) => {
     return res.redirect(
       "/?error=" + encodeURIComponent("Error deleting short link.")
     );
+  }
+};
+
+export const getHello = async (req, res) => {
+  try {
+    const users = [
+        { id: 1, name: 'John Doe', email: 'john@example.com' },
+        { id: 2, name: 'Jane Smith', email: 'jane@example.com' }
+    ];
+    throw new Error("Hello error");
+    res.status(200).json(ApiResponse.success(users, "Users retrieved successfully"));
+  } catch (error) {
+    console.error(error);
+    throw new Error("Hello error");
   }
 };

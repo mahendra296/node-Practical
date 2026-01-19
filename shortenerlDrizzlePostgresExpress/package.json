@@ -9,15 +9,21 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node --env-file=.env --watch index.js",
-    "debug": "node --env-file=.env --inspect index.js"
+    "debug": "node --env-file=.env --inspect index.js",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
-    "connect-flash": "^0.1.1",
+    "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.45.0",
     "ejs": "^3.1.10",
     "express": "^5.2.1",
-    "express-session": "^1.18.2",
-    "mysql": "^2.18.1",
-    "mysql2": "^3.15.3",
+    "postgres": "^3.4.8",
     "zod": "^4.1.13"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.8",
+    "tsx": "^4.21.0"
   }
 }

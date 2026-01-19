@@ -12,13 +12,15 @@ A comprehensive collection of Express.js projects demonstrating different databa
 - [Projects](#projects)
   - [URL Shortener (JSON Storage)](#1-url-shortener-json-storage---shortenerlexpress)
   - [URL Shortener (Prisma ORM)](#2-url-shortener-prisma-orm---shortenerlprismaexpress)
-  - [URL Shortener (Drizzle ORM)](#3-url-shortener-drizzle-orm---shortenerldrizzleexpress)
-  - [Prisma MySQL Demo](#4-prisma-mysql-demo---prismamysql)
-  - [Drizzle MySQL Demo](#5-drizzle-mysql-demo---drizzlemysql)
-  - [Direct MySQL Demo](#6-direct-mysql-demo---mysql)
-  - [Express Basics](#7-express-basics---environment)
+  - [URL Shortener (Drizzle + MySQL)](#3-url-shortener-drizzle--mysql---shortenerldrizzlemysqlexpress)
+  - [URL Shortener (Drizzle + PostgreSQL)](#4-url-shortener-drizzle--postgresql---shortenerldrizzlepostgresexpress)
+  - [Prisma MySQL Demo](#5-prisma-mysql-demo---prismamysql)
+  - [Drizzle MySQL Demo](#6-drizzle-mysql-demo---drizzlemysql)
+  - [Direct MySQL Demo](#7-direct-mysql-demo---mysql)
+  - [Express Basics](#8-express-basics---environment)
 - [Database Setup](#database-setup)
   - [MySQL Setup](#mysql-setup)
+  - [PostgreSQL Setup](#postgresql-setup)
   - [Prisma Configuration](#prisma-configuration)
   - [Drizzle Configuration](#drizzle-configuration)
 - [Environment Variables](#environment-variables)
@@ -33,11 +35,12 @@ A comprehensive collection of Express.js projects demonstrating different databa
 
 ## Overview
 
-This repository contains multiple Express.js projects that serve as educational resources for learning different approaches to building web applications with Node.js. The main focus is demonstrating three different database integration patterns:
+This repository contains multiple Express.js projects that serve as educational resources for learning different approaches to building web applications with Node.js. The main focus is demonstrating different database integration patterns:
 
 1. **Direct MySQL** - Raw SQL queries with `mysql2/promise`
 2. **Prisma ORM** - Type-safe database client with migrations
-3. **Drizzle ORM** - Lightweight TypeScript ORM
+3. **Drizzle ORM (MySQL)** - Lightweight TypeScript ORM with MySQL
+4. **Drizzle ORM (PostgreSQL)** - Lightweight TypeScript ORM with PostgreSQL
 
 Each approach is implemented in both a demo project and a full URL shortener application.
 
@@ -67,16 +70,27 @@ expressJs/
 │   ├── views/                   # EJS templates
 │   └── index.js                 # Application entry point
 │
-├── shortenerlDrizzleExpress/    # URL Shortener with Drizzle ORM
-│   ├── config/                  # Database configuration
-│   ├── controller/              # Request handlers
-│   ├── drizzle/                 # Drizzle schema & migrations
-│   ├── model/                   # Drizzle data access layer
-│   ├── public/                  # Static assets
-│   ├── routes/                  # API route definitions
-│   ├── views/                   # EJS templates
-│   ├── drizzle.config.js        # Drizzle configuration
-│   └── index.js                 # Application entry point
+├── shortenerlDrizzleMysqlExpress/    # URL Shortener with Drizzle ORM + MySQL
+│   ├── config/                       # Database configuration
+│   ├── controller/                   # Request handlers
+│   ├── drizzle/                      # Drizzle schema & migrations
+│   ├── model/                        # Drizzle data access layer
+│   ├── public/                       # Static assets
+│   ├── routes/                       # API route definitions
+│   ├── views/                        # EJS templates
+│   ├── drizzle.config.js             # Drizzle configuration
+│   └── index.js                      # Application entry point
+│
+├── shortenerlDrizzlePostgresExpress/ # URL Shortener with Drizzle ORM + PostgreSQL
+│   ├── config/                       # Database configuration (postgres-js)
+│   ├── controller/                   # Request handlers
+│   ├── drizzle/                      # Drizzle schema & migrations
+│   ├── model/                        # Drizzle data access layer
+│   ├── public/                       # Static assets
+│   ├── routes/                       # API route definitions
+│   ├── views/                        # EJS templates
+│   ├── drizzle.config.js             # Drizzle configuration
+│   └── index.js                      # Application entry point
 │
 ├── prismaMysql/                 # Prisma MySQL demo project
 │   ├── prisma/                  # Prisma schema & migrations
@@ -110,11 +124,12 @@ expressJs/
 | Package | Version | Description |
 |---------|---------|-------------|
 | mysql2 | 3.15.3 | MySQL client for Node.js with Promise support |
+| postgres | 3.4.8 | PostgreSQL client for Node.js |
 | @prisma/client | 7.1.0 | Auto-generated type-safe database client |
 | prisma | 7.1.0 | Prisma CLI for migrations and schema management |
 | @prisma/adapter-mariadb | 7.1.0 | MariaDB adapter for Prisma |
 | mariadb | 3.4.5 | MariaDB connector |
-| drizzle-orm | 0.45.0 | Lightweight TypeScript ORM |
+| drizzle-orm | 0.45.0 | Lightweight TypeScript ORM (MySQL & PostgreSQL) |
 | drizzle-kit | 0.31.8 | Drizzle CLI for migrations |
 
 ### Templating & Utilities
@@ -133,7 +148,8 @@ Before you begin, ensure you have the following installed:
 
 - **Node.js** (v18.0.0 or higher) - [Download](https://nodejs.org/)
 - **npm** (v9.0.0 or higher) - Comes with Node.js
-- **MySQL** (v8.0 or higher) or **MariaDB** (v10.5 or higher)
+- **MySQL** (v8.0 or higher) or **MariaDB** (v10.5 or higher) - For MySQL-based projects
+- **PostgreSQL** (v14.0 or higher) - For PostgreSQL-based projects
 - **Git** (optional) - For cloning the repository
 
 ### Verify Installation
@@ -142,6 +158,7 @@ Before you begin, ensure you have the following installed:
 node --version    # Should output v18.x.x or higher
 npm --version     # Should output v9.x.x or higher
 mysql --version   # Should output mysql Ver 8.x.x or higher
+psql --version    # Should output psql 14.x or higher
 ```
 
 ---
@@ -166,8 +183,12 @@ npm install
 cd ../shortenerlPrismaExpress
 npm install
 
-# URL Shortener (Drizzle)
-cd ../shortenerlDrizzleExpress
+# URL Shortener (Drizzle + MySQL)
+cd ../shortenerlDrizzleMysqlExpress
+npm install
+
+# URL Shortener (Drizzle + PostgreSQL)
+cd ../shortenerlDrizzlePostgresExpress
 npm install
 
 # Prisma Demo
@@ -248,9 +269,9 @@ npm run dev
 
 ---
 
-### 3. URL Shortener (Drizzle ORM) - `shortenerlDrizzleExpress`
+### 3. URL Shortener (Drizzle + MySQL) - `shortenerlDrizzleMysqlExpress`
 
-URL shortener using Drizzle ORM. Demonstrates lightweight ORM approach with schema-first development.
+URL shortener using Drizzle ORM with MySQL. Demonstrates lightweight ORM approach with schema-first development.
 
 **Features:**
 - All features from JSON version
@@ -260,7 +281,7 @@ URL shortener using Drizzle ORM. Demonstrates lightweight ORM approach with sche
 
 **Setup & Run:**
 ```bash
-cd shortenerlDrizzleExpress
+cd shortenerlDrizzleMysqlExpress
 
 # Generate migrations
 npm run db:generate
@@ -276,7 +297,35 @@ npm run dev
 
 ---
 
-### 4. Prisma MySQL Demo - `prismaMysql`
+### 4. URL Shortener (Drizzle + PostgreSQL) - `shortenerlDrizzlePostgresExpress`
+
+URL shortener using Drizzle ORM with PostgreSQL. Demonstrates Drizzle's PostgreSQL integration using the `postgres` (postgres.js) driver.
+
+**Features:**
+- All features from JSON version
+- PostgreSQL database persistence
+- Drizzle migrations with PostgreSQL dialect
+- Schema-driven development using `pg-core`
+
+**Setup & Run:**
+```bash
+cd shortenerlDrizzlePostgresExpress
+
+# Generate migrations
+npm run db:generate
+
+# Apply migrations
+npm run db:migrate
+
+# Start the application
+npm run dev
+```
+
+**Access:** http://localhost:3000
+
+---
+
+### 5. Prisma MySQL Demo - `prismaMysql`
 
 A demonstration project showing Prisma ORM capabilities with a complete User-Post-Profile schema.
 
@@ -302,7 +351,7 @@ node app.js
 
 ---
 
-### 5. Drizzle MySQL Demo - `drizzleMySql`
+### 6. Drizzle MySQL Demo - `drizzleMySql`
 
 A demonstration project showing Drizzle ORM capabilities with a simple users table.
 
@@ -331,7 +380,7 @@ npm run db:studio
 
 ---
 
-### 6. Direct MySQL Demo - `mysql`
+### 7. Direct MySQL Demo - `mysql`
 
 Raw MySQL queries demonstration without ORM abstraction.
 
@@ -349,7 +398,7 @@ node app.js
 
 ---
 
-### 7. Express Basics - `environment`
+### 8. Express Basics - `environment`
 
 Learn Express.js fundamentals including routing, middleware, and templating.
 
@@ -426,6 +475,52 @@ CREATE TABLE short_links (
 
 ---
 
+### PostgreSQL Setup
+
+#### 1. Install PostgreSQL
+
+**Windows:**
+Download and install from [PostgreSQL Downloads](https://www.postgresql.org/download/windows/)
+
+**macOS:**
+```bash
+brew install postgresql@14
+brew services start postgresql@14
+```
+
+**Linux (Ubuntu/Debian):**
+```bash
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+sudo systemctl start postgresql
+```
+
+#### 2. Create Database
+
+```sql
+-- Connect to PostgreSQL
+psql -U postgres
+
+-- Create database
+CREATE DATABASE shortener_postgres_db;
+
+-- Create a dedicated user (recommended)
+CREATE USER app_user WITH PASSWORD 'your_secure_password';
+GRANT ALL PRIVILEGES ON DATABASE shortener_postgres_db TO app_user;
+
+-- Connect to the new database and grant schema permissions
+\c shortener_postgres_db
+GRANT ALL ON SCHEMA public TO app_user;
+```
+
+#### 3. Connection String Format
+
+```
+postgresql://user:password@localhost:5432/database_name
+```
+
+---
+
 ### Prisma Configuration
 
 #### 1. Schema Definition
@@ -481,9 +576,9 @@ npx prisma studio
 
 ### Drizzle Configuration
 
-#### 1. Schema Definition
+#### MySQL Schema Definition
 
-Located at `drizzle/schema.js`:
+Located at `drizzle/schema.js` (MySQL projects):
 
 ```javascript
 import { int, mysqlTable, serial, varchar } from "drizzle-orm/mysql-core";
@@ -495,7 +590,21 @@ export const shortLinkTable = mysqlTable("short_links", {
 });
 ```
 
-#### 2. Drizzle Config
+#### PostgreSQL Schema Definition
+
+Located at `drizzle/schema.js` (PostgreSQL projects):
+
+```javascript
+import { pgTable, serial, varchar } from "drizzle-orm/pg-core";
+
+export const shortLinkTable = pgTable("short_links", {
+  id: serial("id").primaryKey(),
+  url: varchar("name", { length: 255 }).notNull(),
+  shortCode: varchar("short_code", { length: 255 }).notNull().unique(),
+});
+```
+
+#### Drizzle Config (MySQL)
 
 Located at `drizzle.config.js`:
 
@@ -512,7 +621,26 @@ export default defineConfig({
 });
 ```
 
-#### 3. Common Drizzle Commands
+#### Drizzle Config (PostgreSQL)
+
+Located at `drizzle.config.js`:
+
+```javascript
+import { defineConfig } from "drizzle-kit";
+
+export default defineConfig({
+  schema: "./drizzle/schema.js",
+  out: "./drizzle",
+  dialect: "postgresql",
+  dbCredentials: {
+    url: process.env.DATABASE_URL,
+  },
+  verbose: true,
+  strict: true,
+});
+```
+
+#### Common Drizzle Commands
 
 | Command | Description |
 |---------|-------------|
@@ -558,7 +686,7 @@ DATABASE_PASSWORD=your_password
 DATABASE_NAME=shortener_db
 ```
 
-#### For Drizzle Projects
+#### For Drizzle Projects (MySQL)
 
 ```env
 # Server Configuration
@@ -566,6 +694,16 @@ PORT=3000
 
 # Database URL
 DATABASE_URL="mysql://user:password@localhost:3306/database_name"
+```
+
+#### For Drizzle Projects (PostgreSQL)
+
+```env
+# Server Configuration
+PORT=3000
+
+# Database URL
+DATABASE_URL="postgresql://user:password@localhost:5432/database_name"
 ```
 
 ### Environment Variable Reference
@@ -754,12 +892,22 @@ model shortLinks {
 }
 ```
 
-### URL Shortener Schema (Drizzle)
+### URL Shortener Schema (Drizzle - MySQL)
 
 ```javascript
 export const shortLinkTable = mysqlTable("short_links", {
   id: int().autoincrement().primaryKey(),
   url: varchar({ length: 255 }).notNull(),
+  shortCode: varchar("short_code", { length: 255 }).notNull().unique(),
+});
+```
+
+### URL Shortener Schema (Drizzle - PostgreSQL)
+
+```javascript
+export const shortLinkTable = pgTable("short_links", {
+  id: serial("id").primaryKey(),
+  url: varchar("name", { length: 255 }).notNull(),
   shortCode: varchar("short_code", { length: 255 }).notNull().unique(),
 });
 ```
@@ -793,7 +941,17 @@ npm run dev      # Start with hot reload
 npm run debug    # Start with debugging
 ```
 
-### shortenerlDrizzleExpress
+### shortenerlDrizzleMysqlExpress
+
+```bash
+npm run dev         # Start with hot reload
+npm run debug       # Start with debugging
+npm run db:generate # Generate Drizzle migrations
+npm run db:migrate  # Apply migrations
+npm run db:studio   # Open Drizzle Studio
+```
+
+### shortenerlDrizzlePostgresExpress
 
 ```bash
 npm run dev         # Start with hot reload
@@ -900,7 +1058,7 @@ const prisma = new PrismaClient();
 const links = await prisma.shortLinks.findMany();
 ```
 
-#### Drizzle ORM
+#### Drizzle ORM (MySQL)
 
 ```javascript
 import { drizzle } from "drizzle-orm/mysql2";
@@ -908,6 +1066,19 @@ import mysql from "mysql2/promise";
 
 const connection = await mysql.createConnection(process.env.DATABASE_URL);
 const db = drizzle(connection);
+
+// Usage
+const links = await db.select().from(shortLinkTable);
+```
+
+#### Drizzle ORM (PostgreSQL)
+
+```javascript
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
+
+const client = postgres(process.env.DATABASE_URL);
+const db = drizzle(client);
 
 // Usage
 const links = await db.select().from(shortLinkTable);
@@ -948,6 +1119,7 @@ const links = await db.select().from(shortLinkTable);
 - SQL-like syntax preference
 - Serverless/Edge deployments
 - Small bundle size required
+- Multi-database support (MySQL, PostgreSQL, SQLite)
 
 ---
 
@@ -955,7 +1127,7 @@ const links = await db.select().from(shortLinkTable);
 
 ### Common Issues
 
-#### 1. Database Connection Failed
+#### 1. MySQL Database Connection Failed
 
 ```
 Error: connect ECONNREFUSED 127.0.0.1:3306
@@ -966,7 +1138,18 @@ Error: connect ECONNREFUSED 127.0.0.1:3306
 - Check DATABASE_URL or connection credentials
 - Verify firewall settings
 
-#### 2. Prisma Client Not Generated
+#### 2. PostgreSQL Database Connection Failed
+
+```
+Error: connect ECONNREFUSED 127.0.0.1:5432
+```
+
+**Solution:**
+- Ensure PostgreSQL server is running
+- Check DATABASE_URL format: `postgresql://user:password@localhost:5432/database`
+- Verify user permissions and database exists
+
+#### 3. Prisma Client Not Generated
 
 ```
 Error: @prisma/client did not initialize yet
@@ -977,7 +1160,7 @@ Error: @prisma/client did not initialize yet
 npx prisma generate
 ```
 
-#### 3. Drizzle Migrations Not Found
+#### 4. Drizzle Migrations Not Found
 
 ```
 Error: No migrations found
@@ -989,7 +1172,7 @@ npm run db:generate
 npm run db:migrate
 ```
 
-#### 4. Port Already in Use
+#### 5. Port Already in Use
 
 ```
 Error: listen EADDRINUSE: address already in use :::3000
@@ -1008,7 +1191,7 @@ Error: listen EADDRINUSE: address already in use :::3000
   kill -9 <PID>
   ```
 
-#### 5. Environment Variables Not Loading
+#### 6. Environment Variables Not Loading
 
 **Solution:**
 - Ensure `.env` file exists in project root
@@ -1048,13 +1231,16 @@ This project is open source and available under the [MIT License](LICENSE).
 - [Prisma](https://www.prisma.io/docs)
 - [Drizzle ORM](https://orm.drizzle.team/)
 - [MySQL](https://dev.mysql.com/doc/)
+- [PostgreSQL](https://www.postgresql.org/docs/)
+- [postgres.js (Node.js client)](https://github.com/porsager/postgres)
 - [EJS Templates](https://ejs.co/)
 
 ### Tutorials
 
 - [Express.js Guide](https://expressjs.com/en/guide/routing.html)
 - [Prisma Getting Started](https://www.prisma.io/docs/getting-started)
-- [Drizzle Quick Start](https://orm.drizzle.team/docs/get-started-mysql)
+- [Drizzle Quick Start (MySQL)](https://orm.drizzle.team/docs/get-started-mysql)
+- [Drizzle Quick Start (PostgreSQL)](https://orm.drizzle.team/docs/get-started-postgresql)
 
 ---
 
