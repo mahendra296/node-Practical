@@ -6,3 +6,4 @@ shortenerlPrismaExpress/node_modules/**
 /drizzleMySql/drizzle/meta/**
 /shortenerlPrismaExpress/prisma/migrations/**
 shortenerlDrizzlePostgresExpress/drizzle/00*.sql
+shortenerlDrizzlePostgresExpress/drizzle/meta/*.json
